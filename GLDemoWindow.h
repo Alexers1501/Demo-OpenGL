@@ -17,6 +17,7 @@ class GLDemoWindow: public Window
 {
 protected:
 	double _turn_angle;
+	double _tilt_phase;
 public:
 	GLDemoWindow(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 	virtual ~GLDemoWindow() = default;
