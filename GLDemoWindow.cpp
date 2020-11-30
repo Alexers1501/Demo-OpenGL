@@ -10,6 +10,51 @@
 
 static constexpr double Pi = acos(-1.);
 
+static VertexVector s_cube_vertices {
+	{  1.0, 1.0, 2.0 },
+	{  1.0, -1.0, 2.0 },
+	{  -1.0, -1.0, 2.0 },
+	{ - 1.0, 1.0, 2.0 },
+	{  1.0, 1.0, 0.0 },
+	{  1.0, -1.0, 0.0 },
+	{  -1.0, -1.0, 0.0 },
+	{  -1.0, 1.0, 0.0 }
+};
+
+static FaceVector s_cube_faces {
+	{ 4, 0, 1, 2, 3 },
+	{ 4, 7, 6, 5, 4 },
+	{ 4, 1, 0, 4, 5 },
+	{ 4, 3, 2, 6, 7 },
+	{ 4, 0, 3, 7, 4 },
+	{ 4, 2, 1, 5, 6 }
+};
+
+static NormalVector s_cube_normals {
+	{  0.0, 0.0, 1.0 },
+	{  0.0, 0.0, -1.0 },
+	{  1.0, 0.0, 0.0 },
+	{  -1.0, 0.0, 0.0 },
+	{  0.0, 1.0, 0.0 },
+	{  0.0, -1.0, 0.0 },
+};
+
+static ColorVector s_cube_colors {
+	{  1.0f, 1.0f, 0.0f },
+	{  0.0f, 0.0f, 1.0f },
+	{  0.0f, 1.0f, 1.0f },
+	{  1.0f, 0.0f, 0.0f },
+	{  1.0f, 0.0f, 1.0f },
+	{  0.0f, 1.0f, 0.0f },
+};
+
+Model cube
+{
+	s_cube_vertices, s_cube_faces, s_cube_normals, s_cube_colors
+};
+
+
+
 GLDemoWindow::GLDemoWindow(int width, int height)
 : Window (width, height)
 {
@@ -25,11 +70,19 @@ void GLDemoWindow::setup()
 	glEnable(GL_DEPTH_TEST);//проверка буфера глубины
 //	glDisable(GL_DEPTH_TEST);//выулючает глубину
 
+	glEnable(GL_LIGHTING);//рсчет освещенности
+	glEnable(GL_LIGHT0);//включаем источник света
+
 	glClearColor(0.1f, 0.3f, 0.4f, 1.f) ;
 
 	glMatrixMode(GL_PROJECTION);//матрица проекций
 	gluPerspective(45.0, double (getWidth()) / double (getHeight()), 0.01, 30.0);
 	glMatrixMode(GL_MODELVIEW);//матрица моделей вида MV
+
+	//повышаем в 2 раза производительность
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);//не рисует задние грани
+	glFrontFace(GL_CW);
 }
 
 void GLDemoWindow::render()
@@ -58,47 +111,79 @@ void GLDemoWindow::render()
 //
 //	glEnd();
 
-	//рисуем куб
-	glBegin(GL_QUADS);
+//	//рисуем куб
+//	glBegin(GL_QUADS);
+//
+//	//рисуем грани
+//	glColor3d(0.000, 0.000, 1.000);
+//	glNormal3d(0.0, 0.0, -1.0);//координаты вектора нормали для освещения
+//	glVertex3d(1.0, 1.0 ,0.0);//нижняя грань
+//	glVertex3d(-1.0, 1.0 ,0.0);
+//	glVertex3d(-1.0, -1.0 ,0.0);
+//	glVertex3d(1.0, -1.0 ,0.0);
+//
+//	glColor3d(1.000, 1.000, 0.000);//верхняя грань
+//	glNormal3d(0.0, 0.0, 1.0);
+//	glVertex3d(1.0, 1.0 ,2.0);
+//	glVertex3d(1.0, -1.0 ,2.0);
+//	glVertex3d(-1.0, -1.0 ,2.0);
+//	glVertex3d(-1.0, 1.0 ,2.0);
+//
+//	glColor3d(0.000, 1.000, 1.000);
+//	glNormal3d(	1.0, 0.0, 0.0);
+//	glVertex3d(1.0, -1.0 ,2.0);//передняя грань
+//	glVertex3d(1.0, 1.0 ,2.0);
+//	glVertex3d(1.0, 1.0 ,0.0);
+//	glVertex3d(1.0, -1.0 ,0.0);
+//
+//	glColor3d(1.000, 0.000, 0.000);
+//	glNormal3d(-1.0, 0.0, 0.0);
+//	glVertex3d(-1.0, 1.0 ,2.0);//задняя грань
+//	glVertex3d(-1.0, -1.0 ,2.0);
+//	glVertex3d(-1.0, -1.0 ,0.0);
+//	glVertex3d(-1.0, 1.0 ,0.0);
+//
+//	glColor3d(0.000, 1.000, 0.000);
+//	glNormal3d(0.0, -1.0, 0.0);
+//	glVertex3d(-1.0, -1.0 ,2.0);//левая грань
+//	glVertex3d(1.0, -1.0 ,2.0);
+//	glVertex3d(1.0, -1.0 ,0.0);
+//	glVertex3d(-1.0, -1.0 ,0.0);
+//
+//	glColor3d(1.000, 0.000, 1.000);
+//	glNormal3d(0.0, 1.0, 0.0);
+//	glVertex3d(1.0, 1.0 ,2.0);//правая грань
+//	glVertex3d(-1.0, 1.0 ,2.0);
+//	glVertex3d(-1.0, 1.0 ,0.0);
+//	glVertex3d(1.0, 1.0 ,0.0);
+//
+//	glEnd();
 
-	//рисуем грани
-	glColor3d(0.000, 0.000, 1.000);
-	glVertex3d(1.0, 1.0 ,0.0);//нижняя грань
-	glVertex3d(-1.0, 1.0 ,0.0);
-	glVertex3d(-1.0, -1.0 ,0.0);
-	glVertex3d(1.0, -1.0 ,0.0);
+//	glPushMatrix();
+//	glPopMatrix();
 
-	glColor3d(1.000, 1.000, 0.000);//верхняя грань
-	glVertex3d(1.0, 1.0 ,2.0);
-	glVertex3d(1.0, -1.0 ,2.0);
-	glVertex3d(-1.0, -1.0 ,2.0);
-	glVertex3d(-1.0, 1.0 ,2.0);
+	draw_model(cube);
+}
 
-	glColor3d(0.000, 1.000, 1.000);
-	glVertex3d(1.0, -1.0 ,2.0);//передняя грань
-	glVertex3d(1.0, 1.0 ,2.0);
-	glVertex3d(1.0, 1.0 ,0.0);
-	glVertex3d(1.0, -1.0 ,0.0);
+void GLDemoWindow::draw_model(Model &model)
+{
+	for (unsigned i =0; i < model.faces.size(); ++i){
+		int count = model.faces[i][0];
+		if (count == 3)
+			glBegin(GL_TRIANGLES);
+		else if (count == 4)
+			glBegin(GL_QUADS);
+		else
+			glBegin(GL_POLYGON);
 
-	glColor3d(1.000, 0.000, 0.000);
-	glVertex3d(-1.0, 1.0 ,2.0);//задняя грань
-	glVertex3d(-1.0, -1.0 ,2.0);
-	glVertex3d(-1.0, -1.0 ,0.0);
-	glVertex3d(-1.0, 1.0 ,0.0);
+		glNormal3dv(&model.normals[i][0]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &model.colors[i][0]);
+		for (int j = 1; j <= count; ++j){
+			glVertex3dv(&model.vertices[model.faces[i][j]][0]);
+		}
 
-	glColor3d(0.000, 1.000, 0.000);
-	glVertex3d(-1.0, -1.0 ,2.0);//левая грань
-	glVertex3d(1.0, -1.0 ,2.0);
-	glVertex3d(1.0, -1.0 ,0.0);
-	glVertex3d(-1.0, -1.0 ,0.0);
-
-	glColor3d(1.000, 0.000, 1.000);
-	glVertex3d(1.0, 1.0 ,2.0);//правая грань
-	glVertex3d(-1.0, 1.0 ,2.0);
-	glVertex3d(-1.0, 1.0 ,0.0);
-	glVertex3d(1.0, 1.0 ,0.0);
-
-	glEnd();
+		glEnd();
+	}
 }
 
 void GLDemoWindow::do_logic()
