@@ -2,7 +2,7 @@
  * GLDemoWindow.h
  *
  *  Created on: 29 но€б. 2020 г.
- *      Author: User
+ *      Author: Alexers1501
  */
 
 #ifndef GLDEMOWINDOW_H_

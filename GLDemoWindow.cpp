@@ -8,6 +8,8 @@
 #include <cmath>
 #include "GLDemoWindow.h"
 
+#include "Primitives.h"
+
 static constexpr double Pi = acos(-1.);
 
 static VertexVector s_cube_vertices {
@@ -56,17 +58,8 @@ static ColorVector s_cube_colors {	// белые грани
 	{  1.0f, 1.0f, 0.9f },
 };
 
-//static TexCoordVector s_cube_tex_coords {
-//	{  { 0.00, 0.00 }, { 0.25, 0.00 }, { 0.25, 0.50 }, { 0.00, 0.50 } },
-//	{  { 0.25, 0.00 }, { 0.50, 0.00 }, { 0.50, 0.50 }, { 0.25, 0.50 } },
-//	{  { 0.50, 0.00 }, { 0.75, 0.00 }, { 0.75, 0.50 }, { 0.50, 0.50 } },
-//	{  { 0.00, 0.50 }, { 0.25, 0.50 }, { 0.25, 1.00 }, { 0.00, 1.00 } },
-//	{  { 0.25, 0.50 }, { 0.50, 0.50 }, { 0.50, 1.00 }, { 0.25, 1.00 } },
-//	{  { 0.50, 0.50 }, { 0.75, 0.50 }, { 0.75, 1.00 }, { 0.50, 1.00 } },
-//};
-
 static TexCoordVector s_cube_tex_coords {
-	{  { 0.00, 0.00 }, { 0.40, 0.00 }, { 4.00, 4.00 }, { 0.00, 4.00 } },
+	{  { 0.00, 0.00 }, { 0.25, 0.00 }, { 0.25, 0.50 }, { 0.00, 0.50 } },
 	{  { 0.25, 0.00 }, { 0.50, 0.00 }, { 0.50, 0.50 }, { 0.25, 0.50 } },
 	{  { 0.50, 0.00 }, { 0.75, 0.00 }, { 0.75, 0.50 }, { 0.50, 0.50 } },
 	{  { 0.00, 0.50 }, { 0.25, 0.50 }, { 0.25, 1.00 }, { 0.00, 1.00 } },
@@ -140,11 +133,15 @@ void GLDemoWindow::render()
 //
 //	glEnd();
 
-	_crate_texture.bind();//привязка текстуры
-	glEnable(GL_TEXTURE_2D);
 
-	draw_model(cube);
-	glDisable(GL_TEXTURE_2D);
+//	_crate_texture.bind();//привязка текстуры
+//	glEnable(GL_TEXTURE_2D);
+//
+//	draw_model(cube);
+//	glDisable(GL_TEXTURE_2D);
+
+
+	make_cylinder_flat(6);
 }
 
 void GLDemoWindow::draw_model(Model &model)

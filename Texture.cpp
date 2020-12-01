@@ -2,7 +2,7 @@
  * Texture.cpp
  *
  *  Created on: 1 дек. 2020 г.
- *      Author: User
+ *      Author: Alexers1501
  */
 
 #include "Texture.h"

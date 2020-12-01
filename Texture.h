@@ -2,7 +2,7 @@
  * Texture.h
  *
  *  Created on: 1 дек. 2020 г.
- *      Author: User
+ *      Author: Alexers1501
  */
 
 #ifndef TEXTURE_H_
