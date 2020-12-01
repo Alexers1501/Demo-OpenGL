@@ -39,28 +39,46 @@ static NormalVector s_cube_normals {
 	{  0.0, -1.0, 0.0 },
 };
 
-static ColorVector s_cube_colors {
-	{  1.0f, 1.0f, 0.0f },
-	{  0.0f, 0.0f, 1.0f },
-	{  0.0f, 1.0f, 1.0f },
-	{  1.0f, 0.0f, 0.0f },
-	{  1.0f, 0.0f, 1.0f },
-	{  0.0f, 1.0f, 0.0f },
+//static ColorVector s_cube_colors {
+//	{  1.0f, 1.0f, 0.0f },
+//	{  0.0f, 0.0f, 1.0f },
+//	{  0.0f, 1.0f, 1.0f },
+//	{  1.0f, 0.0f, 0.0f },
+//	{  1.0f, 0.0f, 1.0f },
+//	{  0.0f, 1.0f, 0.0f },
+//};
+static ColorVector s_cube_colors {	// белые грани
+	{  1.0f, 1.0f, 0.9f },
+	{  0.9f, 0.9f, 1.0f },
+	{  0.9f, 1.0f, 1.0f },
+	{  1.0f, 0.9f, 0.9f },
+	{  1.0f, 0.9f, 1.0f },
+	{  1.0f, 1.0f, 0.9f },
+};
+
+static TexCoordVector s_cube_tex_coords {
+	{  { 0.00, 0.00 }, { 0.25, 0.00 }, { 0.25, 0.50 }, { 0.00, 0.50 } },
+	{  { 0.25, 0.00 }, { 0.50, 0.00 }, { 0.50, 0.50 }, { 0.25, 0.50 } },
+	{  { 0.50, 0.00 }, { 0.75, 0.00 }, { 0.75, 0.50 }, { 0.50, 0.50 } },
+	{  { 0.00, 0.50 }, { 0.25, 0.50 }, { 0.25, 1.00 }, { 0.00, 1.00 } },
+	{  { 0.25, 0.50 }, { 0.50, 0.50 }, { 0.50, 1.00 }, { 0.25, 1.00 } },
+	{  { 0.50, 0.50 }, { 0.75, 0.50 }, { 0.75, 1.00 }, { 0.50, 1.00 } },
 };
 
 Model cube
 {
-	s_cube_vertices, s_cube_faces, s_cube_normals, s_cube_colors
+	s_cube_vertices, s_cube_faces, s_cube_normals, s_cube_colors, s_cube_tex_coords
 };
 
 
 
 GLDemoWindow::GLDemoWindow(int width, int height)
-: Window (width, height)
+: Window (width, height), _crate_texture("crate_tex.png")
 {
 	SDL_GL_SetSwapInterval(1); //1- VSync синхронизация с обновлением экрана
 //	SDL_GL_SetSwapInterval(0); //0-немедленная отрисовка
 //	SDL_GL_SetSwapInterval(-1); //-1-адаптивный VSync
+
 	_turn_angle = 0.;
 	_tilt_phase = 0.;
 }
@@ -72,6 +90,8 @@ void GLDemoWindow::setup()
 
 	glEnable(GL_LIGHTING);//рсчет освещенности
 	glEnable(GL_LIGHT0);//включаем источник света
+
+	glEnable(GL_TEXTURE);
 
 	glClearColor(0.1f, 0.3f, 0.4f, 1.f) ;
 
@@ -111,58 +131,11 @@ void GLDemoWindow::render()
 //
 //	glEnd();
 
-//	//рисуем куб
-//	glBegin(GL_QUADS);
-//
-//	//рисуем грани
-//	glColor3d(0.000, 0.000, 1.000);
-//	glNormal3d(0.0, 0.0, -1.0);//координаты вектора нормали для освещения
-//	glVertex3d(1.0, 1.0 ,0.0);//нижняя грань
-//	glVertex3d(-1.0, 1.0 ,0.0);
-//	glVertex3d(-1.0, -1.0 ,0.0);
-//	glVertex3d(1.0, -1.0 ,0.0);
-//
-//	glColor3d(1.000, 1.000, 0.000);//верхняя грань
-//	glNormal3d(0.0, 0.0, 1.0);
-//	glVertex3d(1.0, 1.0 ,2.0);
-//	glVertex3d(1.0, -1.0 ,2.0);
-//	glVertex3d(-1.0, -1.0 ,2.0);
-//	glVertex3d(-1.0, 1.0 ,2.0);
-//
-//	glColor3d(0.000, 1.000, 1.000);
-//	glNormal3d(	1.0, 0.0, 0.0);
-//	glVertex3d(1.0, -1.0 ,2.0);//передняя грань
-//	glVertex3d(1.0, 1.0 ,2.0);
-//	glVertex3d(1.0, 1.0 ,0.0);
-//	glVertex3d(1.0, -1.0 ,0.0);
-//
-//	glColor3d(1.000, 0.000, 0.000);
-//	glNormal3d(-1.0, 0.0, 0.0);
-//	glVertex3d(-1.0, 1.0 ,2.0);//задняя грань
-//	glVertex3d(-1.0, -1.0 ,2.0);
-//	glVertex3d(-1.0, -1.0 ,0.0);
-//	glVertex3d(-1.0, 1.0 ,0.0);
-//
-//	glColor3d(0.000, 1.000, 0.000);
-//	glNormal3d(0.0, -1.0, 0.0);
-//	glVertex3d(-1.0, -1.0 ,2.0);//левая грань
-//	glVertex3d(1.0, -1.0 ,2.0);
-//	glVertex3d(1.0, -1.0 ,0.0);
-//	glVertex3d(-1.0, -1.0 ,0.0);
-//
-//	glColor3d(1.000, 0.000, 1.000);
-//	glNormal3d(0.0, 1.0, 0.0);
-//	glVertex3d(1.0, 1.0 ,2.0);//правая грань
-//	glVertex3d(-1.0, 1.0 ,2.0);
-//	glVertex3d(-1.0, 1.0 ,0.0);
-//	glVertex3d(1.0, 1.0 ,0.0);
-//
-//	glEnd();
-
-//	glPushMatrix();
-//	glPopMatrix();
+	_crate_texture.bind();//привязка текстуры
+	glEnable(GL_TEXTURE_2D);
 
 	draw_model(cube);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void GLDemoWindow::draw_model(Model &model)
@@ -179,6 +152,7 @@ void GLDemoWindow::draw_model(Model &model)
 		glNormal3dv(&model.normals[i][0]);
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &model.colors[i][0]);
 		for (int j = 1; j <= count; ++j){
+			glTexCoord2dv(&model.tex_coords[i][j-1][0]);
 			glVertex3dv(&model.vertices[model.faces[i][j]][0]);
 		}
 
